@@ -1,5 +1,6 @@
 # Gears-Library
-Getriebe Bibliothek für OpenSCAD / Gears Library for OpenSCAD by janssen86 on Thingiverse: https://www.thingiverse.com/thing:1604369
+This library started as "[Getriebe Bibliothek für OpenSCAD](https://www.thingiverse.com/thing:1604369)" by janssen86 on Thingiverse but has not been updated in some years.
+It has been updated about a year back (from the date of my fork) by k37z3r (at [Gears-Library](https://github.com/k37z3r/Gears-Library) )
 
 ![Zahnstange_und_ritzel](https://github.com/k37z3r/Gears-Library/assets/105192630/d2899f6c-59c1-44bc-9a70-1c09489d1202)
 ![Zahnstange](https://github.com/k37z3r/Gears-Library/assets/105192630/5289196e-bc8d-4c8f-b805-0c4448d5542a)
