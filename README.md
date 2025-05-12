@@ -108,7 +108,7 @@ rack(modul, length, height, width, pressure_angle=20, helix_angle=0)
 
 With helix_angle at its default value of zero this module creates a simple spur gear, otherwise a helical gear is created, like this one:
 ![Zahnstange](https://github.com/k37z3r/Gears-Library/assets/105192630/5289196e-bc8d-4c8f-b805-0c4448d5542a)
-## Rack and Pinion
+## Rack and Pinion (with Helix option)
 rack_and_pinion (modul, rack_length, gear_teeth, rack_height, gear_bore, width, pressure_angle=20, helix_angle=0, together_built=true, optimized=true)
 
 This module uses the rack() and spur_gear() modules to make the desired set of gears. 
@@ -122,17 +122,18 @@ This module makes the cylindrical spiral gear part of a set of worm gears.
 ## Worm Gear Set
 worm_gear(modul, tooth_number, thread_starts, width, length, worm_bore, gear_bore, pressure_angle=20, lead_angle=0, optimized=true, together_built=true)
 
+Makes the Worm and the Worm gear as a set.
 ![Schneckenradsatz](https://github.com/k37z3r/Gears-Library/assets/105192630/2dd9158b-f78d-4718-961c-1aa869be52bb)
 ## Planetary Gear Set
 planetary_gear(modul, sun_teeth, planet_teeth, number_planets, width, rim_width, bore, pressure_angle=20, helix_angle=0, together_built=true, optimized=true)
 
-The set includes the innermost sun, a number of "planets" greater than one, and the outer gear ring made using the herringbone_gear() and the herringbone_ring_gear() modules.
+The set includes the innermost sun, a number of "planets" greater than one, and the outer gear ring made using the herringbone_gear() and the herringbone_ring_gear() modules respectively.
+
 The reason for using the herringbone modules is their helix_angle parameter.
-Set to the default of zero the gears in the set will all be simple spur gears.
-For non-zero values they will form double helix gears, a deviation from the usual result of making helical gears.
-In planetary gears the self-centering effect of the double helix is nessessary to keep the gears aligned as they spin.
-![Planetengetriebe](https://github.com/k37z3r/Gears-Library/assets/105192630/a63f7e01-f9c8-4c52-89cd-5655b7ee908f)
-For this module the setting the 
+Set to the default of zero the gears made will be simple spur gears.
+For non-zero values it forms double helix gears, a deviation from the usual effect of this parameter simply tilting the gears teeth.
+In planetary gears the self-centering effect of the double helix is nessessary to keep the gears aligned as they spin, thus the use of the herringbone modules.
+![Planetengetriebe](https://github.com/k37z3r/Gears-Library/assets/105192630/a63f7e01-f9c8-4c52-89cd-5655b7ee908f) 
 ## Double Helical (Herringbone) Gear
 herringbone_gear(modul, tooth_number, width, bore, pressure_angle=20, helix_angle=0, optimized=true)
 
@@ -140,6 +141,7 @@ herringbone_gear(modul, tooth_number, width, bore, pressure_angle=20, helix_angl
 ## Double Helical Pinion and Crown Set
 bevel_herringbone_gear_pair(modul, gear_teeth, pinion_teeth, axis_angle=90, tooth_width, bore, pressure_angle = 20, helix_angle=0, together_built=true)
 
+A crown and pinion set require different calculations for the meshing of gears that have their axes of rotation at an angle, namely the axis_angle parameter. 
 ![Pfeil-Kegelradpaar](https://github.com/k37z3r/Gears-Library/assets/105192630/006997a4-08b1-4c8d-b223-caae3d562d95)
 ## Double Helical Bevel Gear
 bevel_herringbone_gear(modul, tooth_number, partial_cone_angle, tooth_width, bore, pressure_angle=20, helix_angle=0)
