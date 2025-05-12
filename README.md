@@ -1,7 +1,7 @@
 # Gears-Library
 This library started as "[Getriebe Bibliothek für OpenSCAD](https://www.thingiverse.com/thing:1604369)" by janssen86 on Thingiverse but has not been updated in some years.
 
-k37z3r was working on his fork of that OG library up to about a year back (from the date of my fork) (at [Gears-Library](https://github.com/k37z3r/Gears-Library) )
+k37z3r was working on [his fork](https://github.com/k37z3r/Gears-Library) of that OG library up to about a year back (from the date of my fork in May 2025) (at [Gears-Library](https://github.com/k37z3r/Gears-Library) )
 
 This library contains the following modules:
 - rack(modul, length, height, width, pressure_angle=20, helix_angle=0)
