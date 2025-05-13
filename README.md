@@ -61,8 +61,11 @@ Function to calculate a scalar value using a*phi + r0.
 Gears have many forms and the parameters of their construction are the parameters for these modules.
 The following diagrams show the derivation and the relationship between them.
 ### Spur Gears
- <img src="assets/images/442786919-c6cd1ec0-c1bc-4090-af2a-0f618d3bb596.jpg" alt="Spur Gears" style="width:300px;"> 
-
+ <picture>
+  <source media="(min-width:650px)" srcset="image/spur-gear-params-lg.jpg">
+  <source media="(min-width:300px)" srcset="image/spur-gear-params.jpg">
+  <img src="image/spur-gear-params.jpg" alt="Spur Gear Parameters" style="width:auto;">
+</picture> 
 ![spur-gear-params](https://github.com/user-attachments/assets/c6cd1ec0-c1bc-4090-af2a-0f618d3bb596)
 ### Gear and Pinion
 ![gear-and-pinion](https://github.com/user-attachments/assets/e5527e30-1829-423f-8731-dccc063d46e8)
