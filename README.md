@@ -60,30 +60,25 @@ Function to calculate a scalar value using a*phi + r0.
 ## Common Parameters
 Gears have many forms and the parameters of their construction are the parameters for these modules.
 The following diagrams show the derivation and the relationship between them.
-### Spur Gears
- <picture>
-  <source media="(min-width:650px)" srcset="image/spur-gear-params-lg.jpg">
-  <source media="(min-width:300px)" srcset="image/spur-gear-params.jpg">
-  <img src="image/spur-gear-params.jpg" alt="Spur Gear Parameters" style="width:auto;">
-</picture> 
-![spur-gear-params](https://github.com/user-attachments/assets/c6cd1ec0-c1bc-4090-af2a-0f618d3bb596)
-### Gear and Pinion
-![gear-and-pinion](https://github.com/user-attachments/assets/e5527e30-1829-423f-8731-dccc063d46e8)
-### Bevel Gears
-![bevel-gear-params](https://github.com/user-attachments/assets/671a48b1-134c-4a77-adc6-cb3c31a2dea0)
-### Worm and Worm Gears
-The Worm is the cylindrical spiral part of the set, and the Worm Gear is the circular wheel part.
-![worm-gear-from-side](https://github.com/user-attachments/assets/a534aabe-2aa3-4d0d-856c-c71f96de39b0)
+### Spur Gear Parameters
+![spur-gear-params](images/spur-gear-params.jpg)
+### Gear and Pinion Parameters
+![gear-and-pinion](images/gear-and-pinion.png)
+### Bevel Gear Parameters
+![bevel-gear-params](images/bevel-gear-params.jpg)
+### Worm and Worm Gear Parameters
+The Worm is the cylindrical spiral part of the set, and the Worm Gear is the circular wheel part.\
+![worm-gear-from-side](images/worm-gear-from-side.png)
 
-![worm-gear-parameters](https://github.com/user-attachments/assets/c2199f2b-ae19-4053-80f5-74c7244ee7cf)
-### Circular Pitch ( P sub c )
+![worm-gear-parameters](images/worm-gear-parameters.png)
+### Circular Pitch ( P<sub>c )
 This worm gear parameter is the distance measured along the pitch circle of the gear.
 It can be determined by measuring the distance between any two corresponding points of adjacent teeth as shown here.
 
 In order to calculate this parameter, the axial module (m sub a) should be used, which can be calculated as the following relation.
-![normal-module-mn](https://github.com/user-attachments/assets/2f818e66-51e2-4992-af88-ba80893d15b9)
+![normal-module-mn](images/normal-module-mn.png)
 
-where ( m sub n ) is the Normal Module of the gear.
+where ( m<sub>n ) is the Normal Module of the gear.
 ### "helix_angle"
 The teeth of simple spur gears are parallel to the axis of the gear's rotation.
 Setting the teeth at an angle offers some mechanical advantages at the expense of making the cutting of the gear a bit more complex.
