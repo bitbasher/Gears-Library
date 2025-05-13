@@ -3,7 +3,7 @@ This library started as "[Getriebe Bibliothek für OpenSCAD](https://www.thingiv
 
 k37z3r was working on [his fork](https://github.com/k37z3r/Gears-Library) of that OG library up to about a year back (from the date of my fork in May 2025) (at [Gears-Library](https://github.com/k37z3r/Gears-Library) )
 
-This library contains the following modules:
+## This library contains the following modules:
 - rack(modul, length, height, width, pressure_angle=20, helix_angle=0)
 - spur_gear(modul, tooth_number, width, bore, pressure_angle=20, helix_angle=0, optimized=true)
 - herringbone_gear(modul, tooth_number, width, bore, pressure_angle=20, helix_angle=0, optimized=true)
@@ -18,24 +18,51 @@ This library contains the following modules:
 - worm(modul, thread_starts, length, bore, pressure_angle=20, lead_angle=10, together_built=true)
 - worm_gear(modul, tooth_number, thread_starts, width, length, worm_bore, gear_bore, pressure_angle=20, lead_angle=0, optimized=true, together_built=true)
 ## Constants and Utility Functions 
-
 Name | value | description
 --- | --- | ---
 pi | 3.14159 | ratio between diameter and circumerence of a circle
 rad | 57.29578 | degrees in a radian for conversions
 clearance | 0.2 | arbitrary value for space to leave between mating gears
 ### Functions
-grad( angle )
-function radian( angle )
-function polar_to_cartesian(polvect) where polvect is [radius,angle]
-function ev(r,rho)  [r/cos(rho), grad(tan(rho)-radian(rho))]
-function sphere_ev(theta0,theta) = 1/sin(theta0)*acos(cos(theta)/cos(theta0))-acos(tan(theta0)/tan(theta));
-function sphere_to_cartesian(vect)
+#### rad_to_deg( radians )
+convert an Angle in Radians to Degrees using formula:\
+(Angle in Radians) × 180°/π = Angle in Degrees\
+where 1 Radian = 180/π Degrees = 57.296 Degrees\
+was called grad(angle).
+#### deg_to_rad( degrees )
+convert an Angle in Degrees to Radians using formula:
 
+>Angle in Degrees × π/180° = Angle in Radians\
+ rho x π/180° = / 180°/π\
+ QED degrees/57.29578 --> radians
+
+was called radian( angle )
+#### polar_to_cartesian(\[radius,angle\])
+Convert a 2 dimensional position in polar coordinates into cartesian coordinates.
+* The input vector must have form \[radius,angle\] were the angles are in degrees.
+* It returns a vector of form \[X,Y\]
+#### ev(r,rho) 
+Adjust polar coords given by r (radius?) and rho to by a rotation ? or a translation ? 
+>return a vector \[x,y\] ?
+>where x will be radius/cosine(rho)
+>and y = rad_to_deg(tan(rho) - deg_to_rad(rho))
+>   i.e. polar_to_cartesian( ev(rb,rho_ra) )
+#### sphere_ev(theta0,theta)
+The two angles, theta0 and theta, are used to calculate a mystery value.
+#### sphere_to_cartesian(XYZCoords)
+convert a 3 dimensional position in polar coordinates into cartesian coordinates.\
+>where XYZCoords is a vector of form [radius,angle,angle] with the angles in degrees
+>it returns a vector \[X,Y,Z\]
+#### is_even(number)
+returns 1 when the given number is even and 0 when odd providing a value that, when multiplied by the modulus of a gear, either preserves it, or zeros it in the calculation.
+#### spiral(a, r0, phi);
+Function to calculate a scalar value using a*phi + r0.
 ## Common Parameters
 Gears have many forms and the parameters of their construction are the parameters for these modules.
 The following diagrams show the derivation and the relationship between them.
 ### Spur Gears
+ <img src="assets/images/442786919-c6cd1ec0-c1bc-4090-af2a-0f618d3bb596.jpg" alt="Spur Gears" style="width:300px;"> 
+
 ![spur-gear-params](https://github.com/user-attachments/assets/c6cd1ec0-c1bc-4090-af2a-0f618d3bb596)
 ### Gear and Pinion
 ![gear-and-pinion](https://github.com/user-attachments/assets/e5527e30-1829-423f-8731-dccc063d46e8)
