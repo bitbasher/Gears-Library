@@ -17,6 +17,21 @@ This library contains the following modules:
 - bevel_herringbone_gear_pair(modul, gear_teeth, pinion_teeth, axis_angle=90, tooth_width, bore, pressure_angle = 20, helix_angle=0, together_built=true)
 - worm(modul, thread_starts, length, bore, pressure_angle=20, lead_angle=10, together_built=true)
 - worm_gear(modul, tooth_number, thread_starts, width, length, worm_bore, gear_bore, pressure_angle=20, lead_angle=0, optimized=true, together_built=true)
+## Constants and Utility Functions 
+
+Name | value | description
+--- | --- | ---
+pi | 3.14159 | ratio between diameter and circumerence of a circle
+rad | 57.29578 | degrees in a radian for conversions
+clearance | 0.2 | arbitrary value for space to leave between mating gears
+### Functions
+grad( angle )
+function radian( angle )
+function polar_to_cartesian(polvect) where polvect is [radius,angle]
+function ev(r,rho)  [r/cos(rho), grad(tan(rho)-radian(rho))]
+function sphere_ev(theta0,theta) = 1/sin(theta0)*acos(cos(theta)/cos(theta0))-acos(tan(theta0)/tan(theta));
+function sphere_to_cartesian(vect)
+
 ## Common Parameters
 Gears have many forms and the parameters of their construction are the parameters for these modules.
 The following diagrams show the derivation and the relationship between them.
@@ -146,6 +161,7 @@ A crown and pinion set require different calculations for the meshing of gears t
 ## Double Helical Bevel Gear
 bevel_herringbone_gear(modul, tooth_number, partial_cone_angle, tooth_width, bore, pressure_angle=20, helix_angle=0)
 
+Uses two instances of bevel_gear() to make a beveled, double helical gear.
 ![Pfeil-Kegelrad](https://github.com/k37z3r/Gears-Library/assets/105192630/2b7769a4-9ecc-4ec3-ab70-211d7a23e6c5)
 ## Double Helical Inner Gear
 herringbone_ring_gear(modul, tooth_number, width, rim_width, pressure_angle=20, helix_angle=0)
@@ -161,3 +177,9 @@ bevel_gear(modul, tooth_number,  partial_cone_angle, tooth_width, bore, pressure
 ## Helical Inner Gear Wheel
 
 ![Hohlrad](https://github.com/k37z3r/Gears-Library/assets/105192630/fc1045d3-34b2-42a3-9ba9-9f3667f92d20)
+
+## Spiral Bevel Gear
+spiral_bevel_gear(modul, tooth_number, partial_cone_angle, tooth_width, bore, pressure_angle = 20, helix_angle=30)
+
+Use 16 overlapping, bevel gear intances to make a spiral gear. The helix_angle parameter is ignored.
+![spiral-bevel-gear](https://github.com/user-attachments/assets/e421b49c-f6d7-4137-9de4-71113819a878)
