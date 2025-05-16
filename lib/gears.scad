@@ -102,6 +102,9 @@ function is_even(number) = (number == floor(number/2)*2) ? 1 : 0;
 // not used
 //function ggt(a,b) = a%b == 0 ? b : ggt(b,a%b);
 
+/**
+
+ */
 function spiral(a, r0, phi) = a*phi + r0;
 
 /** 
