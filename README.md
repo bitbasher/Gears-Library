@@ -4,6 +4,9 @@ This library started as "[Getriebe Bibliothek für OpenSCAD](https://www.thingiv
 Shortly after the publishing of the Janssen library [Chris Pen](https://github.com/chrisspen) did good work
 on it and [published here in GitHub](https://github.com/chrisspen/gears) about 7 years ago, but has commited some fixes this year (2025).
 
+I looked on Thingiverse for remixes and found this one by [eleotlecram](https://www.thingiverse.com/eleotlecram/designs), [OpenSCAD Gear Library with Customizer](https://www.thingiverse.com/thing:4194148). This was expecially interesting because it added parameter definitions to enable the use of the Customizer panel. He also added a lot of internal documentation that explained the operation of the code in details. His work really helped my understanding of OpenSCAN, gear math, and coding it.
+As a side light he added a hub feature: some of the designs could be generated with a raised hub around the hole for the gear's axle.
+
 k37z3r was working on [his fork](https://github.com/k37z3r/Gears-Library) of that OG library up to about a year back (from the date of my fork in May 2025) (at [Gears-Library](https://github.com/k37z3r/Gears-Library) )
 
 ## This library contains the following modules:
