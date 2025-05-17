@@ -7,22 +7,24 @@ on it and [published here in GitHub](https://github.com/chrisspen/gears) about 7
 I looked on Thingiverse for remixes and found this one by [eleotlecram](https://www.thingiverse.com/eleotlecram/designs), [OpenSCAD Gear Library with Customizer](https://www.thingiverse.com/thing:4194148). This was expecially interesting because it added parameter definitions to enable the use of the Customizer panel. He also added a lot of internal documentation that explained the operation of the code in details. His work really helped my understanding of OpenSCAN, gear math, and coding it.
 As a side light he added a hub feature: some of the designs could be generated with a raised hub around the hole for the gear's axle.
 
-k37z3r was working on [his fork](https://github.com/k37z3r/Gears-Library) of that OG library up to about a year back (from the date of my fork in May 2025) (at [Gears-Library](https://github.com/k37z3r/Gears-Library) )
+k37z3r was working on [his fork](https://github.com/k37z3r/Gears-Library) of that OG library up to about
+a year back. I have based my fork of the Gears-Library on his version.
+
+My first goal was to document the code in k37z3r's version but when i found eleotlecram's superior documentation i shamelessly copied it into my own fork,
+which ment translating it from from the German. I have also incorporated the his idea to use the Customizer panel to drive the gear type example generation code,
+extending it with selector lists, range limits, and so on to limit the user to acceptable values for the input parameters. I also extended his addition of
+a raised hub at the center of some of the gear wheels to all of the gears that have the wheel form, even those making gear sets.
+
+I have also moved a lot of the module documentation from this Readme to the repo's Wiki
 
 ## This library contains the following modules:
-- rack(modul, length, height, width, pressure_angle=20, helix_angle=0)
-- spur_gear(modul, tooth_number, width, bore, pressure_angle=20, helix_angle=0, optimized=true)
-- herringbone_gear(modul, tooth_number, width, bore, pressure_angle=20, helix_angle=0, optimized=true)
-- rack_and_pinion (modul, rack_length, gear_teeth, rack_height, gear_bore, width, pressure_angle=20, helix_angle=0, together_built=true, optimized=true)
-- ring_gear(modul, tooth_number, width, rim_width, pressure_angle=20, helix_angle=0)
-- herringbone_ring_gear(modul, tooth_number, width, rim_width, pressure_angle=20, helix_angle=0)
-- planetary_gear(modul, sun_teeth, planet_teeth, number_planets, width, rim_width, bore, pressure_angle=20, helix_angle=0, together_built=true, optimized=true)
-- bevel_gear(modul, tooth_number,  partial_cone_angle, tooth_width, bore, pressure_angle=20, helix_angle=0)
-- bevel_herringbone_gear(modul, tooth_number, partial_cone_angle, tooth_width, bore, pressure_angle=20, helix_angle=0)
-- bevel_gear_pair(modul, gear_teeth, pinion_teeth, axis_angle=90, tooth_width, bore, pressure_angle = 20, helix_angle=0, together_built=true)
-- bevel_herringbone_gear_pair(modul, gear_teeth, pinion_teeth, axis_angle=90, tooth_width, bore, pressure_angle = 20, helix_angle=0, together_built=true)
-- worm(modul, thread_starts, length, bore, pressure_angle=20, lead_angle=10, together_built=true)
-- worm_gear(modul, tooth_number, thread_starts, width, length, worm_bore, gear_bore, pressure_angle=20, lead_angle=0, optimized=true, together_built=true)
+ Single Gears | Double Helix versions | Gear Sets
+ :---: | :---: | ---
+|rack | | rack and pinion |
+spur gear | herringbone gear | planetary gear set
+ring gear | herringbone ring gear | 
+bevel gear | herringbone bevel gear | bevel gear set, bevel herringbone gear set
+worm |  | worm gear set
 ## Constants and Utility Functions 
 Name | value | description
 --- | --- | ---
