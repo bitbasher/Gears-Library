@@ -1,6 +1,9 @@
 # Gears-Library
 This library started as "[Getriebe Bibliothek für OpenSCAD](https://www.thingiverse.com/thing:1604369)" by janssen86 on Thingiverse but has not been updated in some years.
 
+Shortly after the publishing of the Janssen library [Chris Pen](https://github.com/chrisspen) did good work
+on it and [published here in GitHub](https://github.com/chrisspen/gears) about 7 years ago, but has commited some fixes this year (2025).
+
 k37z3r was working on [his fork](https://github.com/k37z3r/Gears-Library) of that OG library up to about a year back (from the date of my fork in May 2025) (at [Gears-Library](https://github.com/k37z3r/Gears-Library) )
 
 ## This library contains the following modules:
