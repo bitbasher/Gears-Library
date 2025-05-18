@@ -188,7 +188,37 @@ module herringbone_rack(modul,
 
 /**
     make a simple gear, optionally with the teeth tilted by the helix_angle parameter to give it the form of a helical gear
+
+spur_gear( 2, 20, 5, 5);
+translate( 150, 0, 0 )
+    spur_gear( 2, 20, 5, 5);
  */
+
+gearmod=2;
+teeth =20;
+bore_diam=6;
+
+d = gearmod * teeth;
+c = (teeth <3)? 0 : gearmod/6;
+df = d - 2 * (gearmod + c);
+rf = df / 2;
+r_loch = (2*rf - bore_diam)/8;
+rm = bore_diam/2+2*r_loch;
+z_loch = floor(2*pi*rm/(3*r_loch));
+echo( pi/2 );
+echo( d=d, c=c,df=df,rf=rf,r_loch=r_loch,rm=rm);
+
+function holecalc( rm, r_loch ) = 2*(rm + r_loch * 1.49);
+echo( h=holecalc( rm,r_loch ) );
+
+spur_gear( 2, 20, 5, 5, optimized =true);
+translate( [50,0,0] )
+    spur_gear( 2, 20, 5, 5, optimized =false);
+translate( [0,50,0]) {
+herringbone_gear( 2, 20, 5, 5, helix_angle=30, optimized =true);
+translate( [50,0,0] )
+    herringbone_gear( 2, 20, 5, 5, helix_angle = 30, optimized = false);
+}
 module spur_gear(modul, tooth_number, width, bore, pressure_angle = 20, helix_angle = 0, optimized = true)
     {
     d = modul * tooth_number;
@@ -207,6 +237,7 @@ module spur_gear(modul, tooth_number, width, bore, pressure_angle = 20, helix_an
     gamma = rad*width/(r*tan(90-helix_angle));
     step = rho_ra/16;
     tau = 360/tooth_number;
+
     r_hole = (2*rf - bore)/8;
     rm = bore/2+2*r_hole;
     z_hole = floor(2*pi*rm/(3*r_hole));
@@ -278,24 +309,38 @@ module spur_gear(modul, tooth_number, width, bore, pressure_angle = 20, helix_an
     If the helix_angle is left at its default zero value it makes a simple spur gear.
 
  */
-module herringbone_gear(modul, tooth_number, width, bore, pressure_angle = 20, helix_angle=0, optimized=true)
+// TODO herringbone_gear( 2, 20, 5, 5, helix_angle=30 );
+
+/// to remember this calculation used as the bore_diam param given when calling spar_gear()
+function thin_rim(rm,r_loch) = 2*(rm+r_loch*1.49);
+
+module herringbone_gear(modul, tooth_number, width, bore, 
+        pressure_angle = 20, helix_angle=0, optimized=true)
     {
     width = width/2;
     d = modul * tooth_number;
     r = d / 2;
     c =  (tooth_number <3)? 0 : modul/6;
+
     df = d - 2 * (modul + c);
     rf = df / 2;
-    r_hole = (2*rf - bore)/8;
+
+    r_hole = (df - bore)/8;
     rm = bore/2+2*r_hole;
     z_hole = floor(2*pi*rm/(3*r_hole));
+
     optimized = (optimized && r >= width*3 && d > 2*bore);
+
     translate([0,0,width])
         {
         union(){
-            spur_gear(modul, tooth_number, width, 2*(rm+r_hole*1.49), pressure_angle, helix_angle, false);
+            spur_gear(modul, tooth_number, width,
+                thin_rim(rm,r_hole), pressure_angle, 
+                helix_angle, false);
             mirror([0,0,1]){
-                spur_gear(modul, tooth_number, width, 2*(rm+r_hole*1.49), pressure_angle, helix_angle, false);
+                spur_gear(modul, tooth_number, width,
+                thin_rim(rm,r_hole), pressure_angle,
+                helix_angle, false);
                 }
             }
         }

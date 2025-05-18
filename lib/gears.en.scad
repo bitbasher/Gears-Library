@@ -6,7 +6,7 @@
 
 // gear library version number
 /* [Hidden] */
-_gears_version = [2025, 05, 14, 1];
+_gears_version = [2025, 05, 17, 1];
 
 function _gears_version() =
 	_gears_version;
@@ -16,23 +16,24 @@ function _gears_version_str() =
 
 /**
 Contains the modules
-- rack(modul, length, height, width, pressure angle=20, helix_beta=0)
-- spur_gear(modul, n_teeth_gear, width, bore_diam, helix_beta=0, hub_thick=0, hub_diameter=0, press_angle=20, optimized=true)
-- rack_and_pinion(modul, length_rack, n_teeth_gear, height_rack, bore_wheel, helix_beta=0, width, hub_thick=0, hub_diameter=0, press_angle=20, make_meshing=true, optimized=true)
-- ring_gear(modul, number of teeth, width, rim_width, pressure angle=20, helix_beta=0)
-- herringbone_gear(modul, n_teeth_gear, width, rim width, pressure angle=20, helix_beta=0)
-- planetary_gear_set(modul, n_teeth_sun, n_teeth_planet, number_planets, width, rim_width, bore, press_angle=20, helix_beta=0, assembled_tooth=true, optimized=true)
-- bevel_gear(modul, n_teeth_gear, pitch_cone_angle, tooth width, bore_diam, press_angle=20, helix_beta=0)
-- herringbone_bevel_gear(modul, n_teeth_gear, pitch_cone_angle, tooth_width, bore_diam, helix_beta=0, press_angle=20 )
-- bevel_gear_set(modul, number of teeth_gear, number of teeth_pinion, axis angle=90, tooth width, bore_diam, helix_beta=0, press_angle = 20, make_meshing=true)
-- herringbone_bevel_gear_set(modul, n_teeth_gear, n_teeth_pinion, tooth width, bore_wheel, bore_pinion, axis_angle=90, helix_beta=10, press_angle=20, make_meshing=true)
-- worm(modul, number of threads, length, bore, lead_angle=10, pressure angle=20, make_meshing=true)
-- worm_gear_set(modul, n_teeth_gear, n_threads, width, length, bore_worm, bore_wheel, lead_angle_phi, hub_thick, hub_diameter, press_angle=20, optimized=true, make_meshing=true)
+- module rack(modul, length, height, width, pressure angle=20, helix_beta=0)
+- module spur_gear(modul, n_teeth_gear, width, bore_diam, helix_beta=0, hub_thick=0, hub_diameter=0, press_angle=20, optimized=true)
+- module spiral_bevel_gear(modul, n_teeth_gear, pitch_cone_angle, tooth_width, bore_diam, helix_beta=30, hub_thick, hub_diameter, press_angle = 20)
+- module rack_and_pinion(modul, length_rack, n_teeth_gear, height_rack, bore_wheel, helix_beta=0, width, hub_thick=0, hub_diameter=0, press_angle=20, make_meshing=true, optimized=true)
+- module ring_gear(modul, number of teeth, width, rim_width, pressure angle=20, helix_beta=0)
+- module herringbone_gear(modul, n_teeth_gear, width, rim width, pressure angle=20, helix_beta=0)
+- module planetary_gear_set(modul, n_teeth_sun, n_teeth_planet, number_planets, width, rim_width, bore, press_angle=20, helix_beta=0, assembled_tooth=true, optimized=true)
+- module bevel_gear(modul, n_teeth_gear, pitch_cone_angle, tooth width, bore_diam, press_angle=20, helix_beta=0)
+- module herringbone_bevel_gear(modul, n_teeth_gear, pitch_cone_angle, tooth_width, bore_diam, helix_beta=0, press_angle=20 )
+- module bevel_gear_set(modul, number of teeth_gear, number of teeth_pinion, axis angle=90, tooth width, bore_diam, helix_beta=0, press_angle = 20, make_meshing=true)
+- module herringbone_bevel_gear_set(modul, n_teeth_gear, n_teeth_pinion, tooth width, bore_wheel, bore_pinion, axis_angle=90, helix_beta=10, press_angle=20, make_meshing=true)
+- module worm(modul, number of threads, length, bore, lead_angle=10, pressure angle=20, make_meshing=true)
+- module worm_gear_set(modul, n_teeth_gear, n_threads, width, length, bore_worm, bore_wheel, lead_angle_phi, hub_thick, hub_diameter, press_angle=20, optimized=true, make_meshing=true)
 */
 
 /* [gear type selection for testing] */
 // can only test one gear type at a time 
-Gear_type = "rack"; // [ "rack":rack, "spur_gear":spur_gear, "herringbone_gear":herringbone_gear,  "rack_and_pinion":rack_and_pinion_set, "ring_gear":ring_gear,  "herringbone_ring_gear":herringbone_ring_gear,  "planetary_gear_set":planetary_gear_set, "bevel_gear":bevel_gear, "bevel_gear_set":bevel_gear_set,  "herringbone_bevel_gear":herringbone_bevel_gear, "herringbone_bevel_gear_set":herringbone_bevel_gear_set, "worm":worm, "worm_gear_set":worm_gear_set]
+Gear_type = "rack"; // [ "rack":rack, "spur_gear":spur_gear, "spiral_bevel_gear",spiral_bevel_gear "herringbone_gear":herringbone_gear,  "rack_and_pinion":rack_and_pinion_set, "ring_gear":ring_gear,  "herringbone_ring_gear":herringbone_ring_gear,  "planetary_gear_set":planetary_gear_set, "bevel_gear":bevel_gear, "bevel_gear_set":bevel_gear_set,  "herringbone_bevel_gear":herringbone_bevel_gear, "herringbone_bevel_gear_set":herringbone_bevel_gear_set, "worm":worm, "worm_gear_set":worm_gear_set]
 
 /* [Options] */
 /* zusammen gebaut translates to "together built" meaning that
@@ -45,15 +46,15 @@ Gear_type = "rack"; // [ "rack":rack, "spur_gear":spur_gear, "herringbone_gear":
 // only for gear sets: when false lay parts out for 3D Printing
 build_together = false;
 
-/// option to perform a weighted optimization
-optimized = false;  
+// option to save weight and material using cutouts
+reduce_weight = false;  
 
-/// option to prevent gear teeth having a helical angle.
-//   all gears will have only striaght teeth
+// option to prevent gear teeth having a helical angle.
+// When true gear teeth cannot be slanted (no helical angle)
 straight = false;
 
 // option to add a hub at the center of the gear wheel
-hub_wanted = true;	
+hub_wanted = true;
 
 
 /* [Basic Gear Parameters] */
@@ -62,13 +63,13 @@ hub_wanted = true;
     the small value following the controls the appearance
     of the parameter in the Customizer
  */
-// module used for testing this library
+// select the gear module vlaue from this list
 Module = 1; // [0.05,0.06,0.08,0.10,0.12,0.16,0.20,0.25,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.25,1.5,2,2.5,3,4,5,6,8,10,12,16,20,25,32,40,50,60]
 
 // width of the gear in mm
 width = 5.0;    // [3.0:0.01:20.0]
 // number of teeth on main gear
-teeth = 30;     // [10:50]
+teeth = 30;     // [5:50]
 // diameter of the axle hole
 bore = 3.0;       // [3.0:0.01:20.0]
 
@@ -80,13 +81,13 @@ hub_thickness = 5;  // [1.0:0.20:15.0]
 /* [Advanced Parameters] */
 /// the most common value
 // the angle at which involute gears meet
-pressure_angle = 20; // [14.5, 15, 20]
+pressure_angle = 20; // [14.5, 20, 25]
 
 helix_angle = 20;   // [-30.0:0.30:30.0]
 
 /* [Values for multi gear sets] */
 // number of teeth on the driven gear
-idler_teeth = 36;   // [10:50]
+idler_teeth = 36;   // [5:50]
 // diameter of its axle hole
 idler_bore = 3;     // [3.0:0.01:20.0]
 
@@ -99,7 +100,7 @@ rack_height = 4; // [2.0:0.1:15.0]
 
 /* [Values for Worm Gears] */
 // Worm lead angle, called φ (phi)
-lead_angle = 4; // 0.01
+lead_angle = 4; // [0.5, 1, 1.5, 2, 3, 4, 5, 7, 9, 11, 14, 17, 21, 25, 30]
 // Number of thread starts
 worm_starts = 1; // [1:1:4]
 
@@ -236,8 +237,6 @@ Permitted modules according to DIN 780:
 2    2.5  3    4    5    6
 8    10   12   16   20   25
 32   40   50   60
-
-[0.05,0.06,0.08,0.10,0.12,0.16,0.20,0.25,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.25,1.5,2,2.5,3,4,5,6,8,10,12,16,20,25,32,40,50,60]
  */
 
 
@@ -373,8 +372,8 @@ module rack(modul, length, height, width, press_angle = 20, helix_beta = 0)
     {
 	// Dimensional calculations
     modul = modul * OmP;
-    c = modul / 6;                                // play, distance or backlash
-    mx = modul / cos (helix_beta);                // Modulus distorted in the x-direction due to helix angle
+    c = modul / 6;                                	// play, distance or backlash
+    mx = modul / cos(helix_beta);                	// Module distorted in the x-direction due to helix angle
     a = 2*mx*tan(press_angle)+c*tan(press_angle);   // Flank width
     b = pi*mx/2-2*mx*tan(press_angle);              // Tip width
     x = width*tan(helix_beta);                      // Displacement of the top surface in the x-direction due to helix angle
@@ -438,29 +437,30 @@ module rack(modul, length, height, width, press_angle = 20, helix_beta = 0)
 module spur_gear(modul, n_teeth_gear, width, bore_diam, helix_beta=0, hub_thick=0, hub_diameter=0, press_angle=20, optimized=true)
     {
 	// Dimension calculations	
-	d = modul * n_teeth_gear;										// Pitch circle diameter
-	r = d / 2;														// Pitch circle radius
-	alpha_stirn = atan(tan(press_angle)/cos(helix_beta));           // Helix angle in the face cut
-	db = d * cos(alpha_stirn);										// Base circle diameter
-	rb = db / 2;													// Base circle radius
-	da = (modul <1)? d + modul * 2.2 : d + modul * 2;				// Tip circle diameter according to DIN 58400 or DIN 867
-	ra = da / 2;													// Tip circle radius
-	c =  (n_teeth_gear <3)? 0 : modul/6;							// head play
-	df = d - 2 * (modul + c);										// Root circle diameter
-	rf = df / 2;													// Root circle radius
-	rho_ra = acos(rb/ra);											// Maximum roll-off angle
-																	// Involute begins on the base circle and ends at the tip circle
-	rho_r = acos(rb/r);												// Roll-off angle at the pitch circle
-																	// Involute begins on the base circle and ends at the tip circle
-	pitch_gamma = 90-helix_beta;                                    // pitch angle, or gamma
-    phi_r = grad(tan(rho_r)-radian(rho_r));							// Angle to the point of the involute on the pitch circle
-	gamma = rad*width/(r*tan(pitch_gamma));				            // Twist angle for extrusion
-	schritt = rho_ra/16;											// Involute is divided into 16 pieces
-	tau = 360/n_teeth_gear;											// Pitch angle, spacing between teeth
+	d = modul * n_teeth_gear;									// Pitch circle diameter
+	r = d / 2;													// Pitch circle radius
+	alpha_stirn = atan(tan(press_angle)/cos(helix_beta));       // Helix angle in the face cut
+	db = d * cos(alpha_stirn);									// Base circle diameter
+	rb = db / 2;												// Base circle radius
+	da = (modul <1)? d + modul * 2.2 : d + modul * 2;			// Tip circle diameter according to DIN 58400 or DIN 867
+	ra = da / 2;												// Tip circle radius
+	c =  (n_teeth_gear <3)? 0 : modul/6;						// head play
+	df = d - 2 * (modul + c);									// Root circle diameter
+	rf = df / 2;												// Root circle radius
+	rho_ra = acos(rb/ra);										// Maximum roll-off angle
+																// Involute begins on the base circle and ends at the tip circle
+	rho_r = acos(rb/r);											// Roll-off angle at the pitch circle
+																// Involute begins on the base circle and ends at the tip circle
+	pitch_gamma = 90-helix_beta;                                // pitch angle, or gamma
+    phi_r = grad(tan(rho_r)-radian(rho_r));						// Angle to the point of the involute on the pitch circle
+	gamma = rad*width/(r*tan(pitch_gamma));				        // Twist angle for extrusion
+	step = rho_ra/16;										// Involute is divided into 16 pieces
+	tau = 360/n_teeth_gear;										// Pitch angle, spacing between teeth
 	
-	r_loch = (2*rf - bore_diam)/8;									// Radius of the holes for material/weight savings
-	rm = bore_diam/2+2*r_loch;										// Distance of the hole axes from the main axis
-	z_loch = floor(2*pi*rm/(3*r_loch));								// Number of holes for material/weight savings
+	r_hole = (df - bore_diam)/8;								// Radius of the holes for material/weight savings
+	rm = bore_diam/2+2*r_hole;									// Distance of the hole axes from the main axis
+
+	z_hole = floor(2*pi*rm/(3*r_hole));							// Number of holes for material/weight savings
 	
 	optimized = (optimized && r >= width*1.5 && d > 2*bore_diam);	// does optimization makes sense?
 
@@ -480,20 +480,20 @@ module spur_gear(modul, n_teeth_gear, width, bore_diam, helix_beta=0, hub_thick=
 							rotate (rot){								// Number of teeth times copy_rotate and rotate
 								polygon(concat(							// tooth
 									[[0,0]],							// Tooth segment begins and ends at the origin
-									[for (rho = [0:schritt:rho_ra])		// _From_ zero degrees (base circle) _To_ the maximum involute angle (tip circle)
+									[for (rho = [0:step:rho_ra])		// _From_ zero degrees (base circle) _To_ the maximum involute angle (tip circle)
 										polar_to_cart(circ_invol(rb,rho))], // First involute flank
 									[polar_to_cart(circ_invol(rb,rho_ra))], // Point of the involute on the tip circle
-									[for (rho = [rho_ra:-schritt:0])	// _From_ the maximum involute angle (tip circle) _To_ zero degrees (base circle)
+									[for (rho = [rho_ra:-step:0])	// _From_ the maximum involute angle (tip circle) _To_ zero degrees (base circle)
 										polar_to_cart( [ circ_invol(rb,rho)[0], tooth_width-circ_invol(rb,rho)[1] ] )
                                         ]
-											// Second involute flank (180*(1-_play_)) instead of 180 degrees,
-																		// to allow for play on the flanks
+										// Second involute flank (180*(1-_play_)) instead of 180 degrees,
+										// to allow for play on the flanks
 									)
 								);
 							}
 						}
 					}			
-					circle(r = rm+r_loch*1.49);	// central hole for axle
+					circle(r = rm+r_hole*1.49);	// hole to make rim of gear
 				}
 			}
 		}
@@ -501,18 +501,18 @@ module spur_gear(modul, n_teeth_gear, width, bore_diam, helix_beta=0, hub_thick=
 		if (optimized) {
 			linear_extrude(height = width){
 				difference(){
-						circle(r = (bore_diam+r_loch)/2);
+						circle(r = (bore_diam+r_hole)/2);
 						circle(r = bore_diam/2); // central hole for axle
 					}
 				}
-			linear_extrude(height = (width-r_loch/2 < width*2/3) ? width*2/3 : width-r_loch/2){
+			linear_extrude(height = (width-r_hole/2 < width*2/3) ? width*2/3 : width-r_hole/2){
 				difference(){
-					circle(r=rm+r_loch*1.51);
+					circle(r=rm+r_hole*1.51);
 					union(){
-						circle(r=(bore_diam+r_loch)/2);
-						for (i = [0:1:z_loch]){
-							translate(sphere_to_cart([rm,90,i*360/z_loch]))
-								circle(r = r_loch);
+						circle(r=(bore_diam+r_hole)/2);
+						for (i = [0:1:z_hole]){
+							translate(sphere_to_cart([rm,90,i*360/z_hole]))
+								circle(r = r_hole);
 						}
 					}
 				}
@@ -523,7 +523,7 @@ module spur_gear(modul, n_teeth_gear, width, bore_diam, helix_beta=0, hub_thick=
 			difference(){
                 union(){
                     linear_extrude(height = width){
-                        circle(r = rm+r_loch*1.51);
+                        circle(r = rm+r_hole*1.51);
                     }
                     linear_extrude(height = width+hub_thick){
                         circle(r = hub_diameter/2);
@@ -558,46 +558,60 @@ module spur_gear(modul, n_teeth_gear, width, bore_diam, helix_beta=0, hub_thick=
     helix angle = helix angle, called beta, from the rotation axis, default value = 0° (straight teeth)
     optimized = holes for material/weight savings
  */
-module herringbone_gear(modul, n_teeth_gear, width, bore_diam, helix_beta=0, hub_thick=0, hub_diameter=0, press_angle = 20, optimized=true){
 
-	width = width/2;        // use two, half thickness, spur gears with opposing helix angle
-	d = modul * n_teeth_gear;											// Teilkreisdurchmesser
-	r = d / 2;														// Teilkreisradius
-	c =  (n_teeth_gear <3)? 0 : modul/6;								// head play
+/// to remember this calculation used as the bore_diam param given when calling spar_gear()
+function thin_rim(rm,r_hole) = 2*(rm+r_hole*1.49);
 
-	df = d - 2 * (modul + c);										// Fußkreisdurchmesser
-	rf = df / 2;													// Fußkreisradius
+module herringbone_gear(modul, n_teeth_gear, width, bore_diam, helix_beta=0,
+		hub_thick=0, hub_diameter=0, press_angle = 20, optimized=true
+		)
+	{
+	width = width/2;        // use two half thickness spur gears with opposing helix angle
+	d = modul * n_teeth_gear;					// Pitch circle diameter
+	r = d / 2;									// Pitch circle radius
+	c = (n_teeth_gear <3)? 0 : modul/6;			// head play
 
-	r_loch = (2*rf - bore_diam)/8;									// Radius der Löcher für Material-/Gewichtsersparnis
-	rm = bore_diam/2+2*r_loch;										// Abstand der Achsen der Löcher von der Hauptachse
-	z_loch = floor(2*pi*rm/(3*r_loch));								// Anzahl der Löcher für Material-/Gewichtsersparnis
+	df = d - 2 * (modul + c);					// Root circle diameter
+	// rf = df / 2;								// Root circle radius - unused
+
+	r_hole = (df - bore_diam)/8;				// Radius of the holes for material/weight savings
+	rm = bore_diam/2+2*r_hole;					// Distance of the axes of the holes from the main axis
+	z_hole = floor(2*pi*rm/(3*r_hole));			// Number of holes for material/weight savings
 	
-	optimized = (optimized && r >= width*3 && d > 2*bore_diam);		// ist Optimierung sinnvoll?
+	optimized = (optimized && r >= width*3 && d > 2*bore_diam);		// doees Optimization make sense?
 
-	translate([0,0,width]){
+	translate([0,0,width])
+		{
 		union(){
-			spur_gear(modul, n_teeth_gear, width, 2*(rm+r_loch*1.49), hub_thick, hub_diameter, press_angle, helix_beta, false);		// untere Hälfte
-			mirror([0,0,1]){
-				spur_gear(modul, n_teeth_gear, width, 2*(rm+r_loch*1.49), hub_thick, hub_diameter, press_angle, helix_beta, false);	// obere Hälfte
+			spur_gear(modul, n_teeth_gear, width,	
+				thin_rim(rm,r_hole), helix_beta=helix_beta, 
+				hub_thick, hub_diameter, press_angle, 
+				optimized=false);		// lower half
+			mirror([0,0,1])
+				{
+				spur_gear(modul, n_teeth_gear, width, 
+					thin_rim(rm,r_hole), helix_beta=-helix_beta, 
+					hub_thick, hub_diameter, press_angle, 
+					optimized=false);	// upper half, opposite twist
+				}
 			}
 		}
-	}
 	// with material savings
 	if (optimized) {
 		linear_extrude(height = width*2){
 			difference(){
-					circle(r = (bore_diam+r_loch)/2);
-					circle(r = bore_diam/2);	// Bohrung
+					circle(r = (bore_diam+r_hole)/2);
+					circle(r =  bore_diam/2);	// central hole for axle
 				}
 			}
-		linear_extrude(height = (2*width-r_loch/2 < 1.33*width) ? 1.33*width : 2*width-r_loch/2){ //width*4/3
+		linear_extrude(height = (2*width-r_hole/2 < 1.33*width) ? 1.33*width : 2*width-r_hole/2){ //width*4/3
 			difference(){
-				circle(r=rm+r_loch*1.51);
+				circle(r=rm+r_hole*1.51);
 				union(){
-					circle(r=(bore_diam+r_loch)/2);
-					for (i = [0:1:z_loch]){
-						translate(sphere_to_cart([rm,90,i*360/z_loch]))
-							circle(r = r_loch);
+					circle(r=(bore_diam+r_hole)/2);
+					for (i = [0:1:z_hole]){
+						translate(sphere_to_cart([rm,90,i*360/z_hole]))
+							circle(r = r_hole);
 					}
 				}
 			}
@@ -608,7 +622,7 @@ module herringbone_gear(modul, n_teeth_gear, width, bore_diam, helix_beta=0, hub
         difference(){
             union(){
                 linear_extrude(height = width*2){
-                    circle(r = rm+r_loch*1.51);
+                    circle(r = rm+r_hole*1.51);
                 }
                 linear_extrude(height = width*2+hub_thick){
                     circle(r = hub_diameter/2);
@@ -648,14 +662,16 @@ module herringbone_gear(modul, n_teeth_gear, width, bore_diam, helix_beta=0, hub
         default value = 0° (straight gearing)
 
  */
-module rack_and_pinion(modul, length_rack, n_teeth_gear, height_rack, bore_wheel, width, hub_thick=0, hub_diameter=0, press_angle=20, helix_beta=0, make_meshing=true, optimized=true) {
+module rack_and_pinion(modul, length_rack, n_teeth_gear, height_rack, bore_wheel, helix_beta=0, width, hub_thick=0, hub_diameter=0, press_angle=20, make_meshing=true, optimized=true) {
 
 	abstand = make_meshing? modul*n_teeth_gear/2 : modul*n_teeth_gear;
 
-	rack(modul, length_rack, height_rack, width, press_angle, -helix_beta);
+	color( "PaleGreen" )
+		rack(modul, length_rack, height_rack, width, press_angle, -helix_beta);
 	translate([0,abstand,0])
 		rotate(a=360/n_teeth_gear)
-			spur_gear(modul, n_teeth_gear, width, bore_wheel, hub_thick, hub_diameter, press_angle, helix_beta, optimized);
+			color( "PowderBlue" )
+			spur_gear(modul, n_teeth_gear, width, bore_wheel, helix_beta, hub_thick, hub_diameter, press_angle, optimized);
 }
 
 /*	Hohlrad
@@ -697,7 +713,7 @@ module ring_gear(modul, n_teeth_gear, width, rim_width, press_angle = 20, helix_
 	phi_r = grad(tan(rho_r)-radian(rho_r));							// Winkel zum Punkt der Evolvente auf Teilkreis
 	pitch_gamma = 90-helix_beta;                                    // pitch angle, or gamma
     gamma = rad*width/(r*tan(pitch_gamma));				            // twist angle for extrusion
-	schritt = rho_ra/16;											// Evolvente wird in 16 Stücke geteilt
+	step = rho_ra/16;											// Evolvente wird in 16 Stücke geteilt
 	tau = 360/n_teeth_gear;											// Pitch angle, spacing between teeth
 
 	// Zeichnung
@@ -715,11 +731,11 @@ module ring_gear(modul, n_teeth_gear, width, rim_width, press_angle = 20, helix_
 					rotate (rot) {									// "Zahnzahl-mal" copy_rotaten und drehen
 						polygon( concat(
 							[[0,0]],
-							[for (rho = [0:schritt:rho_ra])			// von null Grad (Grundkreis)
+							[for (rho = [0:step:rho_ra])			// von null Grad (Grundkreis)
 																	// bis maximaler Evolventenwinkel (Kopfkreis)
 								polar_to_cart(circ_invol(rb,rho))],
 							[polar_to_cart(circ_invol(rb,rho_ra))],
-							[for (rho = [rho_ra:-schritt:0])		// von maximaler Evolventenwinkel (Kopfkreis)
+							[for (rho = [rho_ra:-step:0])		// von maximaler Evolventenwinkel (Kopfkreis)
 																	// bis null Grad (Grundkreis)
 								polar_to_cart([circ_invol(rb,rho)[0], tooth_width-circ_invol(rb,rho)[1]])]
 																	// (180*(1+_play_)) statt 180,
@@ -754,6 +770,7 @@ module ring_gear(modul, n_teeth_gear, width, rim_width, press_angle = 20, helix_
 module herringbone_ring_gear(modul, n_teeth_gear, width, rim_width, press_angle = 20, helix_beta = 0) {
 
 	width = width / 2; // make the gear in two halves
+	color( "PaleGreen" )
 	translate([0,0,width])
 		union()
             { // first the upper half
@@ -794,12 +811,12 @@ module planetary_gear_set(modul, n_teeth_sun, n_teeth_planet, qty_planets, width
     {
 	// Dimension calculations
 	d_sonne = modul*n_teeth_sun; // Teilkreisdurchmesser Sonne
-	d_planet = modul*n_teeth_plane; // Teilkreisdurchmesser Planeten
+	d_planet = modul*n_teeth_planet; // Teilkreisdurchmesser Planeten
 	achsabstand = modul*(n_teeth_sun +  n_teeth_planet) / 2;		    // Abstand von Sonnenrad-/Hohlradachse und Planetenachse
-	n_teeth_ring_gear = n_teeth_sun + 2*n_teeth_planet;				    // Anzahl der Zähne des Hohlrades
-    d_hohlrad = modul*n_teeth_ring_gear;								// Teilkreisdurchmesser Hohlrad
+	n_teeth_ring_gear = n_teeth_sun + 2*n_teeth_planet;				    // Number of teeth of the hollow wheel
+    d_hohlrad = modul*n_teeth_ring_gear;								// Part circle diameter hollow wheel
 
-	drehen = istgerade(n_teeth_planet);								    // Muss das Sonnenrad gedreht werden?
+	drehen = istgerade(n_teeth_planet);								    // Must the sun wheel be turned?
 		
 	n_max = floor(180/asin(modul*(n_teeth_planet)/(modul*(n_teeth_sun +  n_teeth_planet))));
 																		// Anzahl Planetenräder: höchstens so viele, wie ohne
@@ -808,6 +825,7 @@ module planetary_gear_set(modul, n_teeth_sun, n_teeth_planet, qty_planets, width
 	// drawing sun gear
 	rotate([0,0,180/n_teeth_sun*drehen])
         {
+		color( "PaleGreen" ) // force to NOT have a hub
 		herringbone_gear(modul, n_teeth_sun, width, bore_diam,
                 helix_beta=-helix_beta, hub_thick=0, hub_diameter=0, 
                 press_angle=press_angle, optimized=optimized
@@ -826,6 +844,7 @@ module planetary_gear_set(modul, n_teeth_sun, n_teeth_planet, qty_planets, width
             for(n=[0:1:qty_planets-1]){
                 translate(sphere_to_cart([achsabstand,90,360/qty_planets*n]))
 					rotate([0,0,n*360*d_sonne/d_planet])
+						color( "PowderBlue" )
 						herringbone_gear(modul, n_teeth_planet, width, bore_diam, helix_beta=helix_beta,
                                 hub_thick=0, hub_diameter=0, press_angle=press_angle, optimized=optimized
                                 );
@@ -837,6 +856,7 @@ module planetary_gear_set(modul, n_teeth_sun, n_teeth_planet, qty_planets, width
                 {
                 translate(sphere_to_cart([achsabstand,90,360/qty_planets*n]))
                 rotate([0,0,n*360*d_sonne/(d_planet)])
+					color( "PowderBlue" )
                     herringbone_gear(modul, n_teeth_planet, width, bore_diam, helix_beta=helix_beta, 
                             hub_thick=0, hub_diameter=0, press_angle=press_angle, optimized=optimized
                             );
@@ -848,11 +868,13 @@ module planetary_gear_set(modul, n_teeth_sun, n_teeth_planet, qty_planets, width
 		for(i=[-(qty_planets-1):2:(qty_planets-1)])
             {
 			translate([planetenabstand, d_planet*i,0])
-				herringbone_gear(modul, n_teeth_planet, width, bore_diam, hub_thick=0, hub_diameter=0, press_angle=press_angle, helix_beta=helix_beta);
+				color( "PowderBlue" ) // forcing NO hub on the planets
+				herringbone_gear(modul, n_teeth_gear=n_teeth_planet, width, bore_diam, helix_beta, hub_thick=0, hub_diameter=0, press_angle=press_angle, optimized=optimized);
 		    }
 	    }
     // finally, draw the ring gear
-	herringbone_ring_gear(modul, n_teeth_gear, width, rim_width, press_angle, helix_beta);
+	color( "BlueViolet" )
+	herringbone_ring_gear(modul, n_teeth_ring_gear, width, rim_width, press_angle, helix_beta);
 }
 
 /*  Kegelrad
@@ -874,7 +896,7 @@ module planetary_gear_set(modul, n_teeth_sun, n_teeth_planet, qty_planets, width
     Pressure angle = Pressure angle, standard value = 20° according to DIN 867. Should not be greater than 45°.
     Helix angle = Helix angle, standard value = 0°
  */
-module bevel_gear(modul, n_teeth_gear, pitch_cone_angle, tooth_width, bore_diam, press_angle = 20, helix_beta=0)
+module bevel_gear(modul, n_teeth_gear, pitch_cone_angle, tooth_width, bore_diam, hub_thick=0, hub_diameter=0, helix_beta=0, press_angle = 20, optimized=false )
     {
 	// Dimension calculations
 	d_aussen = modul * n_teeth_gear;								// Teilkegeldurchmesser auf der Kegelgrundfläche,
@@ -912,7 +934,7 @@ module bevel_gear(modul, n_teeth_gear, pitch_cone_angle, tooth_width, bore_diam,
 	gamma_g = 2*atan(tooth_width*tan(helix_beta)/(2*rg_aussen-tooth_width));
 	gamma = 2*asin(rg_aussen/r_aussen*sin(gamma_g/2));
 	
-	schritt = (delta_a - delta_b)/16;
+	step = (delta_a - delta_b)/16;
 	tau = 360/n_teeth_gear;												// Teilungswinkel
 	start = (delta_b > delta_f) ? delta_b : delta_f;
 	spiegelpunkt = (180 * OmP )/n_teeth_gear+2*phi_r;
@@ -953,19 +975,19 @@ module bevel_gear(modul, n_teeth_gear, pitch_cone_angle, tooth_width, bore_diam,
 								    );
 							}
 							// Zahn
-							for (delta = [start:schritt:delta_a-schritt]){
+							for (delta = [start:step:delta_a-step]){
 								flank_pt_low = sphere_invol(delta_b, delta);
-								flank_pt_high = sphere_invol(delta_b, delta+schritt);
+								flank_pt_high = sphere_invol(delta_b, delta+step);
 								polyhedron(
 									points = [
 										sphere_to_cart([rg_aussen, delta, flank_pt_low]),
 										sphere_to_cart([rg_innen, delta, flank_pt_low+gamma]),
 										sphere_to_cart([rg_innen, delta, spiegelpunkt-flank_pt_low+gamma]),
 										sphere_to_cart([rg_aussen, delta, spiegelpunkt-flank_pt_low]),								
-										sphere_to_cart([rg_aussen, delta+schritt, flank_pt_high]),
-										sphere_to_cart([rg_innen, delta+schritt, flank_pt_high+gamma]),
-										sphere_to_cart([rg_innen, delta+schritt, spiegelpunkt-flank_pt_high+gamma]),
-										sphere_to_cart([rg_aussen, delta+schritt, spiegelpunkt-flank_pt_high])									
+										sphere_to_cart([rg_aussen, delta+step, flank_pt_high]),
+										sphere_to_cart([rg_innen, delta+step, flank_pt_high+gamma]),
+										sphere_to_cart([rg_innen, delta+step, spiegelpunkt-flank_pt_high+gamma]),
+										sphere_to_cart([rg_aussen, delta+step, spiegelpunkt-flank_pt_high])									
 									    ],
 									faces = [[0,1,2],[0,2,3],[0,4,1],[1,4,5],[1,5,2],[2,5,6],[2,6,3],[3,6,7],[0,3,7],[0,7,4],[4,6,5],[4,7,6]],
 									convexity =1
@@ -997,25 +1019,23 @@ module bevel_gear(modul, n_teeth_gear, pitch_cone_angle, tooth_width, bore_diam,
     helix angle = helix angle, default value = 0°
 
  */
-module herringbone_bevel_gear(modul, n_teeth_gear, pitch_cone_angle, tooth_width, bore_diam, helix_beta=0, press_angle = 20){
-
+module herringbone_bevel_gear(modul, n_teeth_gear, pitch_cone_angle, tooth_width, bore_diam, helix_beta=0, hub_thick=0, hub_diameter=0, press_angle = 20, optimized=false)
+	{
 	// Dimension calculations
-	
 	tooth_width = tooth_width / 2;
-	
-	d_aussen = modul * n_teeth_gear;								// Teilkegeldurchmesser auf der Kegelgrundfläche,
-																// entspricht der Sehne im Kugelschnitt
-	r_aussen = d_aussen / 2;									// Teilkegelradius auf der Kegelgrundfläche 
-	rg_aussen = r_aussen/sin(pitch_cone_angle);					// Großkegelradius, entspricht der Länge der Kegelflanke;
+	d_aussen = modul * n_teeth_gear;							// Partial cones diameter on the base surface area
+																// Corresponds to the tendon in the ball cut
+	r_aussen = d_aussen / 2;									// Partial cone radius on the base surface area 
+	rg_aussen = r_aussen/sin(pitch_cone_angle);					// Large cone radius, corresponds to the length of the tap flank
 	c = modul / 6;												// head play
 	df_aussen = d_aussen - (modul +c) * 2 * cos(pitch_cone_angle);
-	rf_aussen = df_aussen / 2;
+	rf_aussen = df_aussen / 2;									// outside (radius?)
 	delta_f = asin(rf_aussen/rg_aussen);
-	hoehe_f = rg_aussen*cos(delta_f);							// Höhe des Kegels vom Fußkegel
+	hoehe_f = rg_aussen*cos(delta_f);							// Height of the cone from the foot cone
 
-	// Torsionswinkel gamma aus Schrägungswinkel
+	// Twist angle gamma made of shock angle
 	gamma_g = 2*atan(tooth_width*tan(helix_beta)/(2*rg_aussen-tooth_width));
-	gamma = 2*asin(rg_aussen/r_aussen*sin(gamma_g/2));
+	gamma   = 2*asin(rg_aussen/r_aussen*sin(gamma_g/2));
 	
 	echo("Partial cone diameter on the cone base surface = ", d_aussen);
 	
@@ -1029,10 +1049,16 @@ module herringbone_bevel_gear(modul, n_teeth_gear, pitch_cone_angle, tooth_width
 	modul_innen = modul*(1-tooth_width/rg_aussen);              // inner module ?? TODO what is this exactly?
 
 	union(){
-		bevel_gear(modul, n_teeth_gear, pitch_cone_angle, tooth_width, bore_diam, press_angle, helix_beta);		// lower half
+		bevel_gear(modul, n_teeth_gear, pitch_cone_angle, tooth_width,
+				bore_diam, helix_beta=helix_beta, hub_thick=0, hub_diameter=0,
+				press_angle=press_angle, optimized=false
+				);		// lower half
 		translate([0,0,hoehe_f-hoehe_fk])
 			rotate(a=-gamma,v=[0,0,1])
-				bevel_gear(modul_innen, n_teeth_gear, pitch_cone_angle, tooth_width, bore_diam, press_angle, -helix_beta);	// upper half
+				bevel_gear(modul_innen, n_teeth_gear, pitch_cone_angle, tooth_width,
+						bore_diam, helix_beta=-helix_beta, hub_thick=0, hub_diameter=0, 
+						press_angle=press_angle, optimized=false
+						);	// upper half
 	}
 }
 
@@ -1055,13 +1081,12 @@ module herringbone_bevel_gear(modul, n_teeth_gear, pitch_cone_angle, tooth_width
     pressure angle = pressure angle, default value = 20° according to DIN 867. Should not be greater than 45°.
     helix angle = helix angle, default value = 0°
  */
-module spiral_bevel_gear(modul, n_teeth_gear, pitch_cone_angle, tooth_width, bore_diam, press_angle = 20, helix_beta=30)
+module spiral_bevel_gear(modul, n_teeth_gear, pitch_cone_angle, tooth_width, bore_diam, helix_beta=30, hub_thick=0, hub_diameter=0, press_angle = 20, optimized=false)
     {
-	schritte = 16;
+	steps = 16;		// number of slices 
 
 	// Dimension calculations
-	
-	b = tooth_width / schritte;	
+	slice_width = tooth_width / steps;	
 	d_aussen = modul * n_teeth_gear;							// Partial cone diameter on the cone base surface
 																// corresponds to the chord in the spherical section
 	r_aussen = d_aussen / 2;									// Partial cone radius on the cone base 
@@ -1074,13 +1099,17 @@ module spiral_bevel_gear(modul, n_teeth_gear, pitch_cone_angle, tooth_width, bor
 	
 	union()
         {
-    	for(i=[0:1:schritte-1]){
-	    	r = rg_aussen-i*b;
-    		helix_beta = a*r;
-	    	modul_r = modul-b*i/rg_aussen;
-		    translate([0,0,b*cos(pitch_cone_angle)*i])
+    	for(i=[0:1:steps-1]){
+	    	r = rg_aussen-i*slice_width;
+    		slice_beta = a*r;
+	    	modul_r = modul-slice_width*i/rg_aussen;
+		    translate([0,0,slice_width*cos(pitch_cone_angle)*i])
 		    	rotate(a=-helix_beta*i,v=[0,0,1])
-			    	bevel_gear(modul_r, n_teeth_gear, pitch_cone_angle, b, bore_diam, press_angle, helix_beta);	// obere Hälfte
+			    	bevel_gear(modul_r, n_teeth_gear, pitch_cone_angle, slice_width, 
+							bore_diam, helix_beta=slice_beta,
+							hub_thick=0, hub_diameter=0,
+							press_angle, optimized=false
+							);	// one slice each time
 		}
 	}
 }
@@ -1105,22 +1134,28 @@ module spiral_bevel_gear(modul, n_teeth_gear, pitch_cone_angle, tooth_width, bor
     tooth_width = width of the teeth from the outer side toward the cone tip
     gear_bore = diameter of the gear center bore
     pinion_bore = diameter of the pinion center bores
+	hub_thick - thickness, or height, of the optional hub
+	hub_diameter - diameter of the optional hub
     pressure_angle = press_angle, default value = 20° according to DIN 867. Should not be greater than 45°.
     helix_angle = helix angle, default value = 0°
     make_meshing = components assembled for construction or disassembled for 3D printing
  */
 
-module bevel_gear_set(modul, n_teeth_gear, n_teeth_pinion, axis_angle=90, tooth_width, bore_wheel, bore_pinion, helix_beta=0, press_angle=20, make_meshing=true)
+module bevel_gear_set(modul, n_teeth_gear, n_teeth_pinion, axis_angle=90, tooth_width,
+		bore_wheel, bore_pinion, helix_beta=0, 
+		hub_thick=0, hub_diameter=0,
+		press_angle=20, make_meshing=true
+		)
     {
 	// Dimension calculations
-	r_rad = modul*n_teeth_gear/2;							// Teilkegelradius des Rads
-	delta_rad = atan(sin(axis_angle)/(n_teeth_pinion/n_teeth_gear+cos(axis_angle)));	// Kegelwinkel des Rads
-	delta_ritzel = atan(sin(axis_angle)/(n_teeth_gear/n_teeth_pinion+cos(axis_angle)));// Kegelwingel des Ritzels
+	r_rad = modul*n_teeth_gear/2;							// Partial cone radius of the wheel
+	delta_rad = atan(sin(axis_angle)/(n_teeth_pinion/n_teeth_gear+cos(axis_angle)));	// Bowling angle of the gear
+	delta_ritzel = atan(sin(axis_angle)/(n_teeth_gear/n_teeth_pinion+cos(axis_angle))); // Bowling angle of the pinion
 	rg = r_rad/sin(delta_rad);								// Radius der Großkugel
 	c = modul / 6;											// head play
-	df_ritzel = pi*rg*delta_ritzel/90 - 2 * (modul + c);	// Fußkegeldurchmesser auf der Großkugel 
-	rf_ritzel = df_ritzel / 2;								// Fußkegelradius auf der Großkugel
-	delta_f_ritzel = rf_ritzel/(pi*rg) * 180;				// Kopfkegelwinkel
+	df_ritzel = pi*rg*delta_ritzel/90 - 2 * (modul + c);	// Footpan diameter on the large ball 
+	rf_ritzel = df_ritzel / 2;								// Foot cone radius on the big ball
+	delta_f_ritzel = rf_ritzel/(pi*rg) * 180;				// Head cone angle
 	rkf_ritzel = rg*sin(delta_f_ritzel);					// Radius des Kegelfußes
 	hoehe_f_ritzel = rg*cos(delta_f_ritzel);				// Höhe des Kegels vom Fußkegel
 	
@@ -1141,16 +1176,34 @@ module bevel_gear_set(modul, n_teeth_gear, n_teeth_pinion, axis_angle=90, tooth_
 	// Drawing
 	// gear
 	rotate([0,0,180 * OmP /n_teeth_gear*drehen])
-		bevel_gear(modul, n_teeth_gear, delta_rad, tooth_width, bore_wheel, helix_beta, press_angle );
+		color( "PaleGreen" )
+		bevel_gear(modul, n_teeth_gear,
+				pitch_cone_angle=delta_rad, tooth_width,
+				bore_diam=bore_wheel, helix_beta, 
+				hub_thick=0, hub_diameter=0, press_angle, 
+				optimized=false
+				);
 	
 	// pinion
 	if (make_meshing)
 		translate([-hoehe_f_ritzel*cos(90-axis_angle),0,hoehe_f_rad-hoehe_f_ritzel*sin(90-axis_angle)])
 			rotate([0,axis_angle,0])
-				bevel_gear(modul, n_teeth_pinion, delta_ritzel, tooth_width, bore_pinion, -helix_beta, press_angle );
+				color( "PowderBlue" )
+				bevel_gear(modul, n_teeth_gear=n_teeth_pinion,
+					pitch_cone_angle=delta_ritzel, tooth_width,
+					bore_diam=bore_pinion, helix_beta=-helix_beta,
+					hub_thick=0, hub_diameter=0, press_angle,
+					optimized=false
+					);
 	else
 		translate([rkf_ritzel*2+modul+rkf_rad,0,0])
-			bevel_gear(modul, n_teeth_pinion, delta_ritzel, tooth_width, bore_pinion, -helix_beta, press_angle );
+			color( "PowderBlue" )
+			bevel_gear(modul, n_teeth_gear=n_teeth_pinion, 
+					pitch_cone_angle=delta_ritzel, tooth_width,
+					bore_diam=bore_pinion, helix_beta=-helix_beta, 
+					hub_thick=0, hub_diameter=0, press_angle,
+					optimized=false
+					);
  }
 
 /*	Pfeil-Kegelradpaar mit beliebigem Achsenwinkel; verwendet das Modul "pfeilkegelrad"
@@ -1174,12 +1227,18 @@ module bevel_gear_set(modul, n_teeth_gear, n_teeth_pinion, axis_angle=90, tooth_
     tooth_width = width of the teeth from the outer side toward the cone tip
     gear_bore = diameter of the gear center bore
     pinion_bore = diameter of the pinion center bores
+	hub_thick - thickness, or height, of the optional hub
+	hub_diameter - diameter of the optional hub
     pressure_angle = pressure angle, default value = 20° according to DIN 867. Should not be greater than 45°.
     helix_beta = helix angle, default value = 0°
     make_meshing = components assembled for construction or disassembled for 3D printing
 
  */
-module herringbone_bevel_gear_set(modul, n_teeth_gear, n_teeth_pinion, tooth_width, bore_wheel, bore_pinion, helix_beta=10, axis_angle=90, press_angle = 20, make_meshing=true )
+module herringbone_bevel_gear_set(modul, n_teeth_gear, n_teeth_pinion, tooth_width,
+		bore_wheel, bore_pinion, helix_beta=10, 
+		hub_thick=0, hub_diameter=0,
+		axis_angle=90, press_angle = 20, make_meshing=true
+		)
     {
 	r_rad = modul*n_teeth_gear/2;							// Gear pitch cone radius
 	delta_rad = atan(sin(axis_angle)/
@@ -1210,17 +1269,28 @@ module herringbone_bevel_gear_set(modul, n_teeth_gear, n_teeth_pinion, tooth_wid
 	
 	// Draw the Main Gear
 	rotate([0,0,180 * OmP /n_teeth_gear*drehen])
-		herringbone_bevel_gear(modul, n_teeth_gear, delta_rad, tooth_width, bore_wheel, helix_beta, press_angle);
+		color( "PaleGreen" )
+		herringbone_bevel_gear(modul, n_teeth_gear, delta_rad, tooth_width,
+				bore_wheel, hub_thick=0, hub_diameter=0, helix_beta, press_angle,
+				optimized=false
+				);
 	
 	// Draw the Pinion
 	if (make_meshing)
 		translate([-hoehe_f_ritzel*cos(90-axis_angle),0,hoehe_f_rad-hoehe_f_ritzel*sin(90-axis_angle)])
 			rotate([0,axis_angle,0])
-				herringbone_bevel_gear(modul, n_teeth_pinion, delta_ritzel, tooth_width, bore_pinion, -helix_beta, press_angle);
+				color( "PowderBlue" )
+				herringbone_bevel_gear(modul, n_teeth_pinion, delta_ritzel, tooth_width,
+						bore_pinion, hub_thick=0, hub_diameter=0, -helix_beta, press_angle,
+						optimized=false
+						);
 	else
 		translate([rkf_ritzel*2+modul+rkf_rad,0,0])
-			herringbone_bevel_gear(modul, n_teeth_pinion, delta_ritzel, tooth_width, bore_pinion, -helix_beta, press_angle);
-
+			color( "PowderBlue" )
+			herringbone_bevel_gear(modul, n_teeth_pinion, delta_ritzel, tooth_width, 
+					bore_pinion, hub_thick=0, hub_diameter=0, -helix_beta, press_angle,
+					optimized=false
+					);
 }
 
 /*
@@ -1256,7 +1326,7 @@ module worm(modul, n_threads, length, bore_diam, lead_angle_phi, press_angle=20,
 	tau_max = 180/n_threads*tan(press_angle);				// Angle from base to head in the normal direction
 	gamma = -rad*length/((rf+modul+c)*tan(lead_angle_phi));	// Torsion angle for extrusion
 	
-	schritt = tau_max/16;
+	step = tau_max/16;
 	
     // Drawing: extrude a surface with a twist, enclosed by two Archimedean spirals
 	if (make_meshing) {
@@ -1270,12 +1340,12 @@ module worm(modul, n_threads, length, bore_diam, lead_angle_phi, press_angle=20,
 							polygon(
 								concat(							
 									[[0,0]],    // start at origin
-									[for (tau = [0:schritt:tau_max])  // rising tooth flank
+									[for (tau = [0:step:tau_max])  // rising tooth flank
 										polar_to_cart( [ spiral(a, rf, tau), tau+i*(360/n_threads) ] )
                                         ],
-									[for (tau = [tau_max:schritt:180/n_threads]) // tip of tooth
+									[for (tau = [tau_max:step:180/n_threads]) // tip of tooth
 										polar_to_cart([spiral(a, rf, tau_max), tau+i*(360/n_threads)])],
-									[for (tau = [180/n_threads:schritt:(180/n_threads+tau_max)])  // descending tooth flank
+									[for (tau = [180/n_threads:step:(180/n_threads+tau_max)])  // descending tooth flank
 										polar_to_cart([spiral(a, rf, 180/n_threads+tau_max-tau), tau+i*(360/n_threads) ] ) 
                                         ]
 								    )
@@ -1341,10 +1411,10 @@ make_meshing = when true the components will be shown assembled for construction
 module worm_gear_set(modul, n_teeth_gear, n_threads, width, length, bore_worm, bore_wheel, lead_angle_phi, hub_thick=0, hub_diameter=0, press_angle=20, optimized=true, make_meshing=true)
     {
 	c = modul / 6;											// head play
-	r_schnecke = modul*n_threads/(2*sin(lead_angle_phi));		// Partial cylinder radius screw
+	r_schnecke = modul*n_threads/(2*sin(lead_angle_phi));	// Partial cylinder radius screw
 	r_rad = modul*n_teeth_gear/2;							// Pitch cone radius spur gear
 	rf_schnecke = r_schnecke - modul - c;					// Foot cylinder radius
-	gamma = -90*width*sin(lead_angle_phi)/(pi*r_rad);			// Rotation angle spur gear
+	gamma = -90*width*sin(lead_angle_phi)/(pi*r_rad);		// Rotation angle spur gear
 	zahnabstand = modul*pi/cos(lead_angle_phi);				// Tooth spacing in transverse section
 	x = istgerade(n_threads)? 0.5 : 1;
 
@@ -1352,16 +1422,19 @@ module worm_gear_set(modul, n_teeth_gear, n_threads, width, length, bore_worm, b
         {
 		translate([r_schnecke,(ceil(length/(2*zahnabstand))-x)*zahnabstand,0])
 			rotate([90,180/n_threads,0])
-				worm(modul, n_threads, length, bore_worm, press_angle, lead_angle_phi, make_meshing);
+				color( "PaleGreen" )
+				worm(modul, n_threads, length, bore_diam=bore_worm, lead_angle_phi, press_angle, make_meshing);
 
 		translate([-r_rad,0,-width/2])
 			rotate([0,0,gamma])
-				spur_gear(modul, n_teeth_gear, width, bore_wheel, hub_thick, hub_diameter, press_angle, -lead_angle_phi, optimized);
+				color( "PowderBlue" )
+				spur_gear(modul, n_teeth_gear, width, bore_diam=bore_wheel, helix_beta=-lead_angle_phi, hub_thick, hub_diameter, press_angle, optimized);
 	    }
 	else {	
 		worm(modul, n_threads, length, bore_worm, lead_angle_phi, press_angle, make_meshing);
 		translate([-2*r_rad,0,0])
-			spur_gear(modul, n_teeth_gear, width, bore_wheel, hub_thick, hub_diameter, press_angle, -lead_angle_phi, optimized);
+			color( "PowderBlue" )
+			spur_gear(modul, n_teeth_gear, width, bore_diam=bore_wheel, helix_beta-lead_angle_phi, hub_thick, hub_diameter, press_angle, optimized);
 	    }
 }
 
@@ -1374,14 +1447,20 @@ if(Gear_type == "rack") {
 } else if(Gear_type == "spur_gear" ) {
     spur_gear(modul=Module, n_teeth_gear=teeth, width=width, 
         bore_diam=bore, helix_beta=finalHelixAngle,
-        hub_diameter=final_hub_diameter, hub_thick=final_hub_thickness,
-        press_angle=pressure_angle, optimized=optimized);
+        hub_thick=final_hub_thickness, hub_diameter=final_hub_diameter, 
+        press_angle=pressure_angle, optimized=reduce_weight);
+
+} else if(Gear_type == "spiral_bevel_gear" ) {
+    spiral_bevel_gear(modul=Module, n_teeth_gear=teeth, pitch_cone_angle=bevel_angle, 
+        tooth_width=bevel_width, bore_diam=bore, helix_beta=finalHelixAngle,
+        hub_thick=final_hub_thickness, hub_diameter=final_hub_diameter, 
+        press_angle=pressure_angle, optimized=reduce_weight);
 
 } else if(Gear_type == "herringbone_gear" ) {
     herringbone_gear(modul=Module, n_teeth_gear=teeth,
     width=width, bore_diam=bore, helix_beta=finalHelixAngle,
     hub_thick=final_hub_thickness, hub_diameter=final_hub_diameter, 
-    press_angle=pressure_angle, optimized=optimized);
+    press_angle=pressure_angle, optimized=reduce_weight);
 
 } else if(Gear_type == "rack_and_pinion" ) {
     rack_and_pinion(modul=Module, length_rack=rack_length, 
@@ -1389,7 +1468,7 @@ if(Gear_type == "rack") {
         bore_wheel=bore, helix_beta=finalHelixAngle, 
         width=width,
         hub_thick=final_hub_thickness, hub_diameter=final_hub_diameter, 
-        press_angle=pressure_angle, make_meshing=build_together, optimized=optimized
+        press_angle=pressure_angle, make_meshing=build_together, optimized=reduce_weight
         );
 
 } else if(  Gear_type == "annular_spur_gear"    || 
@@ -1405,26 +1484,37 @@ if(Gear_type == "rack") {
 } else if(Gear_type == "planetary_gear_set" ) {
     planetary_gear_set(modul=Module, n_teeth_sun=solar_teeth, n_teeth_planet=planet_teeth,
             qty_planets=number_of_planets, width=width, rim_width=rim_width,
-            bore=bore, helix_beta=finalHelixAngle, press_angle=pressure_angle, 
-            make_meshing=true, optimized=optimized);
+            bore_diam=bore, helix_beta=finalHelixAngle, press_angle=pressure_angle, 
+            make_meshing=true, optimized=reduce_weight);
 
 } else if(Gear_type == "bevel_gear" ) {
     bevel_gear(modul=Module, n_teeth_gear=teeth,  pitch_cone_angle=bevel_angle, 
-            tooth_width=bevel_width, bore_diam=bore,
-            press_angle=pressure_angle, helix_beta=finalHelixAngle
+            tooth_width=bevel_width, bore_diam=bore, helix_beta=finalHelixAngle,
+			hub_thick=final_hub_thickness, hub_diameter=final_hub_diameter,
+            press_angle=pressure_angle, optimized=false
             );
 
 } else if(Gear_type == "herringbone_bevel_gear" ) {
     herringbone_bevel_gear(modul=Module, n_teeth_gear=teeth, pitch_cone_angle=bevel_angle, 
-            tooth_width=bevel_width, bore_diam=bore, press_angle=pressure_angle, 
-            helix_beta=finalHelixAngle
+            tooth_width=bevel_width, bore_diam=bore, helix_beta=finalHelixAngle,
+			hub_thick=final_hub_thickness, hub_diameter=final_hub_diameter,
+			press_angle=pressure_angle, optimized=false
             );
 
 } else if(Gear_type == "bevel_gear_set" ) {
-    bevel_gear_set(modul=Module, n_teeth_gear=idler_teeth, bore_wheel=teeth, axis_angle=shaft_angle, tooth_width=bevel_width, bore_wheel=idler_bore, bore_pinion=bore, press_angle=pressure_angle, helix_beta=finalHelixAngle, make_meshing=build_together);
+    bevel_gear_set(modul=Module, n_teeth_gear=teeth, n_teeth_pinion=idler_teeth, axis_angle=shaft_angle,
+			tooth_width=bevel_width, bore_wheel=bore, bore_pinion=idler_bore, helix_beta=finalHelixAngle,
+			hub_thick=final_hub_thickness, hub_diameter=final_hub_diameter,
+			press_angle=pressure_angle, make_meshing=build_together
+			);
 
 } else if(Gear_type == "herringbone_bevel_gear_set" ) {
-    herringbone_bevel_gear_set(modul=Module, n_teeth_gear=idler_teeth, bore_wheel=teeth, axis_angle=shaft_angle, tooth_width=bevel_width, bore_wheel=idler_bore, bore_pinion=bore, press_angle=pressure_angle, helix_beta=finalHelixAngle, make_meshing=build_together);
+    herringbone_bevel_gear_set(modul=Module, n_teeth_gear=teeth, n_teeth_pinion=idler_teeth,
+			axis_angle=shaft_angle, tooth_width=bevel_width, bore_wheel=bore, bore_pinion=idler_bore,
+			helix_beta=finalHelixAngle, 
+			hub_thick=final_hub_thickness, hub_diameter=final_hub_diameter,
+			press_angle=pressure_angle, make_meshing=build_together
+			);
 
 } else if(Gear_type == "worm" ) {
     worm(modul=Module, n_threads=worm_starts, length=worm_length, 
@@ -1436,8 +1526,8 @@ if(Gear_type == "rack") {
     worm_gear_set(modul=Module, n_teeth_gear=teeth, n_threads=worm_starts, 
         width=width, length=worm_length, bore_worm=worm_bore, bore_wheel=bore,
         lead_angle_phi=lead_angle,
-        hub_diameter=final_hub_diameter, hub_thick=final_hub_thickness, 
-        press_angle=pressure_angle, optimized=optimized, make_meshing=build_together
+        hub_thick=final_hub_thickness, hub_diameter=final_hub_diameter,  
+        press_angle=pressure_angle, optimized=reduce_weight, make_meshing=build_together
         );
 }
 
