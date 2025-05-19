@@ -185,40 +185,6 @@ module herringbone_rack(modul,
 
 
 
-
-/**
-    make a simple gear, optionally with the teeth tilted by the helix_angle parameter to give it the form of a helical gear
-
-spur_gear( 2, 20, 5, 5);
-translate( 150, 0, 0 )
-    spur_gear( 2, 20, 5, 5);
- */
-
-gearmod=2;
-teeth =20;
-bore_diam=6;
-
-d = gearmod * teeth;
-c = (teeth <3)? 0 : gearmod/6;
-df = d - 2 * (gearmod + c);
-rf = df / 2;
-r_loch = (2*rf - bore_diam)/8;
-rm = bore_diam/2+2*r_loch;
-z_loch = floor(2*pi*rm/(3*r_loch));
-echo( pi/2 );
-echo( d=d, c=c,df=df,rf=rf,r_loch=r_loch,rm=rm);
-
-function holecalc( rm, r_loch ) = 2*(rm + r_loch * 1.49);
-echo( h=holecalc( rm,r_loch ) );
-
-spur_gear( 2, 20, 5, 5, optimized =true);
-translate( [50,0,0] )
-    spur_gear( 2, 20, 5, 5, optimized =false);
-translate( [0,50,0]) {
-herringbone_gear( 2, 20, 5, 5, helix_angle=30, optimized =true);
-translate( [50,0,0] )
-    herringbone_gear( 2, 20, 5, 5, helix_angle = 30, optimized = false);
-}
 module spur_gear(modul, tooth_number, width, bore, pressure_angle = 20, helix_angle = 0, optimized = true)
     {
     d = modul * tooth_number;
@@ -242,9 +208,9 @@ module spur_gear(modul, tooth_number, width, bore, pressure_angle = 20, helix_an
     rm = bore/2+2*r_hole;
     z_hole = floor(2*pi*rm/(3*r_hole));
         // 
-        // alter the optimized setting to false WHEN it is true AND
-        //  if r is >= the given width AND
-        //  if d is > double the bore.
+        // alter the optimized setting to false WHEN 
+        //  optimized is true BUT
+        //   r is < width*1.5 or d is <= double the bore.
     optimized = (optimized && r >= width*1.5 && d > 2*bore);
     union(){
         rotate([0,0,-phi_r-90*(1-clearance)/tooth_number]){
@@ -309,7 +275,6 @@ module spur_gear(modul, tooth_number, width, bore, pressure_angle = 20, helix_an
     If the helix_angle is left at its default zero value it makes a simple spur gear.
 
  */
-// TODO herringbone_gear( 2, 20, 5, 5, helix_angle=30 );
 
 /// to remember this calculation used as the bore_diam param given when calling spar_gear()
 function thin_rim(rm,r_loch) = 2*(rm+r_loch*1.49);

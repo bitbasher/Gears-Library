@@ -73,6 +73,11 @@ teeth = 30;     // [5:50]
 // diameter of the axle hole
 bore = 3.0;       // [3.0:0.01:20.0]
 
+/// a global parameter for the distance to leave between
+///  the mating surfaces of gears created in a set
+///  also call "spiel", german for play, or _play_
+clearance = 0.05; // [0.0:0.01:0.20]
+
 // diameter of optional raised hub
 hub_diameter = 6;   // [3.0:0.01:20.0]
 // the height of optionla raised hub
@@ -150,77 +155,6 @@ module customizer_separator() {}
 $fn = 96;
 
 /**
-vocabulary - German to English
-
-Gear Forms
-zahnstange              rack
-stirnrad                spur gear
-pfeilrad                helical gear
-zahnstange_und_rad      rack and pinion
-hohlrad                 ring gear
-pfeilhohlrad            herringbone gear
-planetengetriebe        planetary gear
-kegelrad                bevel gear
-pfeilkegelrad           herringbone bevel gear
-kegelradpaar            bevel gear pair
-pfeilkegelradpaar       herringbone bevel gear pair
-schnecke                worm
-schneckenradsatz        worm gear set
-
-Parameters
-modul       module
-laenge      length
-hoehe       height
-breite      width   // could be breadth also
-randbreite  rim width
-nabendicke  hub thickness 
-nabendurchmesser hub diameter
-
-/// pressure angle press_angle standard is 20 degrees
-eingriffswinkel     pressure angle  
-schraegungswinkel   helix angle
-
-pitch_angle of the screw, 
-    equivalent to 90° minus the helix angle.
-    Positive pitch_angle = clockwise.
-
-steigungswinkel pitch angle, symbol is γ (gamma)
-
-zahnzahl        number of gear teeth
-bohrung         bore // diameter of the gear's axle hole
-
-Rack and Pinion Parameters
-laenge stange   length rod --> rack length
-hoehe stange    height rod --> rack height
-bohrung rad     bore gear  --> diameter of axle hole in pinion
-zahnzahl rad    number of teeth - gear --> quantity of teeth on pinion
-
-Planetary Gear Parameters
-zahnzahl sonne  number of teeth - sun
-zahnzahl planet number of teeth - planets
-anzahl planeten quantity of planets
-
-Bevel Gear Parameters
-teilkegelwinkel pitch cone angle --> bevel angle
-zahnbreite      teeth width
-zahnzahl rad    number of teeth - driving gear
-zahnzahl ritzel number of teeth - pinion or driven gear
-achsenwinkel    axis angle // defaults to 90 degrees
-
-Worm Gear Parameters
-gangzahl        number of threads on the cylinder worm
-bohrung schnecke    bore - worm --> diameter of the axle hole in the cylidrical worm gear
-bohrung rad         bore - wheel --> diameter of the axle hole in the worm gear
-
-zusammen gebaut together built
-    applies only to modules making an assembly of gears:
-    name changed to make_meshing
-    if true then show the component gears assembled for construction
-    else show them disassembled for 3D printing
-
-optimiert       optimized
-    if the gear geometry allows, take steps to reduce material or
-    or to increase surface area by adding holes in the web of the gear wheel,
 
 There are example function and module calles for testing in
 comments at the end of this file.
@@ -243,11 +177,6 @@ Permitted modules according to DIN 780:
 // General Constants
 pi = 3.14159;
 rad = 57.29578;
-
-/// a global parameter for the distance to leave between
-///  the mating surfaces of gears created in a set
-///  also call "spiel", german for play, or _play_
-clearance = 0.05; // 0.01
 
 _play_ = clearance;	// Play between mating gear teeth
 OmP = 1-_play_;     // a common use for _play_
@@ -388,7 +317,7 @@ module rack(modul, length, height, width, press_angle = 20, helix_beta = 0)
 					points=[
                         [0,-c,0],           [a,2*modul,0],          [a+b,2*modul,0], 
                         [2*a+b,-c,0],       [pi*mx,-c,0],           [pi*mx,modul-height,0],
-                        [0,modul-height,0],	// Unterseite
+                        [0,modul-height,0],	// bottom
 					    [0+x,-c,width],     [a+x,2*modul,width],    [a+b+x,2*modul,width],
                         [2*a+b+x,-c,width], [pi*mx+x,-c,width],     [pi*mx+x,modul-height,width],
                         [0+x,modul-height,width]
@@ -439,22 +368,24 @@ module spur_gear(modul, n_teeth_gear, width, bore_diam, helix_beta=0, hub_thick=
 	// Dimension calculations	
 	d = modul * n_teeth_gear;									// Pitch circle diameter
 	r = d / 2;													// Pitch circle radius
-	alpha_stirn = atan(tan(press_angle)/cos(helix_beta));       // Helix angle in the face cut
-	db = d * cos(alpha_stirn);									// Base circle diameter
+	c =  (n_teeth_gear <3)? 0 : modul/6;						// head play
+	
+	alpha_spur = atan(tan(press_angle)/cos(helix_beta));		// Helix angle in the face cut
+	db = d * cos(alpha_spur);									// Base circle diameter
 	rb = db / 2;												// Base circle radius
 	da = (modul <1)? d + modul * 2.2 : d + modul * 2;			// Tip circle diameter according to DIN 58400 or DIN 867
 	ra = da / 2;												// Tip circle radius
-	c =  (n_teeth_gear <3)? 0 : modul/6;						// head play
+
 	df = d - 2 * (modul + c);									// Root circle diameter
 	rf = df / 2;												// Root circle radius
-	rho_ra = acos(rb/ra);										// Maximum roll-off angle
-																// Involute begins on the base circle and ends at the tip circle
+
+	rho_ra = acos(rb/ra);										// Maximum roll-off angle																// Involute begins on the base circle and ends at the tip circle
 	rho_r = acos(rb/r);											// Roll-off angle at the pitch circle
 																// Involute begins on the base circle and ends at the tip circle
 	pitch_gamma = 90-helix_beta;                                // pitch angle, or gamma
     phi_r = grad(tan(rho_r)-radian(rho_r));						// Angle to the point of the involute on the pitch circle
 	gamma = rad*width/(r*tan(pitch_gamma));				        // Twist angle for extrusion
-	step = rho_ra/16;										// Involute is divided into 16 pieces
+	step = rho_ra/16;											// Involute is divided into 16 pieces
 	tau = 360/n_teeth_gear;										// Pitch angle, spacing between teeth
 	
 	r_hole = (df - bore_diam)/8;								// Radius of the holes for material/weight savings
@@ -582,7 +513,8 @@ module herringbone_gear(modul, n_teeth_gear, width, bore_diam, helix_beta=0,
 
 	translate([0,0,width])
 		{
-		union(){
+		union()
+			{
 			spur_gear(modul, n_teeth_gear, width,	
 				thin_rim(rm,r_hole), helix_beta=helix_beta, 
 				hub_thick, hub_diameter, press_angle, 
@@ -698,8 +630,8 @@ module ring_gear(modul, n_teeth_gear, width, rim_width, press_angle = 20, helix_
 	ha = (n_teeth_gear >= 20) ? 0.02 * atan((n_teeth_gear/15)/pi) : 0.6;	// Verkürzungsfaktor Zahnkopfhöhe
 	d = modul * n_teeth_gear;											// Teilkreisdurchmesser
 	r = d / 2;														// Teilkreisradius
-	alpha_stirn = atan(tan(press_angle)/cos(helix_beta));// Schrägungswinkel im Stirnschnitt
-	db = d * cos(alpha_stirn);										// Grundkreisdurchmesser
+	alpha_spur = atan(tan(press_angle)/cos(helix_beta));// Schrägungswinkel im Stirnschnitt
+	db = d * cos(alpha_spur);										// Grundkreisdurchmesser
 	rb = db / 2;													// Grundkreisradius
 	c = modul / 6;													// head play
 	da = (modul <1)? d + (modul+c) * 2.2 : d + (modul+c) * 2;		// Kopfkreisdurchmesser
@@ -905,8 +837,8 @@ module bevel_gear(modul, n_teeth_gear, pitch_cone_angle, tooth_width, bore_diam,
 	rg_aussen = r_aussen/sin(pitch_cone_angle);						// Großkegelradius für Zahn-Außenseite, entspricht der Länge der Kegelflanke;
 	rg_innen = rg_aussen - tooth_width;								// Großkegelradius für Zahn-Innenseite	
 	r_innen = r_aussen*rg_innen/rg_aussen;
-	alpha_stirn = atan(tan(press_angle)/cos(helix_beta));// Schrägungswinkel im Stirnschnitt
-	delta_b = asin(cos(alpha_stirn)*sin(pitch_cone_angle));			// Grundkegelwinkel		
+	alpha_spur = atan(tan(press_angle)/cos(helix_beta));// Schrägungswinkel im Stirnschnitt
+	delta_b = asin(cos(alpha_spur)*sin(pitch_cone_angle));			// Grundkegelwinkel		
 	da_aussen = (modul <1)? d_aussen + (modul * 2.2) * cos(pitch_cone_angle): d_aussen + modul * 2 * cos(pitch_cone_angle);
 	ra_aussen = da_aussen / 2;
 	delta_a = asin(ra_aussen/rg_aussen);

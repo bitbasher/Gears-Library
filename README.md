@@ -4,19 +4,21 @@ This library started as "[Getriebe Bibliothek für OpenSCAD](https://www.thingiv
 k37z3r was working on [his fork](https://github.com/k37z3r/Gears-Library) of that OG library up to about a year back (from the date of my fork in May 2025) (at [Gears-Library](https://github.com/k37z3r/Gears-Library) )
 
 ## This library contains the following modules:
-- rack(modul, length, height, width, pressure_angle=20, helix_angle=0)
-- spur_gear(modul, tooth_number, width, bore, pressure_angle=20, helix_angle=0, optimized=true)
-- herringbone_gear(modul, tooth_number, width, bore, pressure_angle=20, helix_angle=0, optimized=true)
-- rack_and_pinion (modul, rack_length, gear_teeth, rack_height, gear_bore, width, pressure_angle=20, helix_angle=0, together_built=true, optimized=true)
-- ring_gear(modul, tooth_number, width, rim_width, pressure_angle=20, helix_angle=0)
-- herringbone_ring_gear(modul, tooth_number, width, rim_width, pressure_angle=20, helix_angle=0)
-- planetary_gear(modul, sun_teeth, planet_teeth, number_planets, width, rim_width, bore, pressure_angle=20, helix_angle=0, together_built=true, optimized=true)
-- bevel_gear(modul, tooth_number,  partial_cone_angle, tooth_width, bore, pressure_angle=20, helix_angle=0)
-- bevel_herringbone_gear(modul, tooth_number, partial_cone_angle, tooth_width, bore, pressure_angle=20, helix_angle=0)
-- bevel_gear_pair(modul, gear_teeth, pinion_teeth, axis_angle=90, tooth_width, bore, pressure_angle = 20, helix_angle=0, together_built=true)
-- bevel_herringbone_gear_pair(modul, gear_teeth, pinion_teeth, axis_angle=90, tooth_width, bore, pressure_angle = 20, helix_angle=0, together_built=true)
-- worm(modul, thread_starts, length, bore, pressure_angle=20, lead_angle=10, together_built=true)
-- worm_gear(modul, tooth_number, thread_starts, width, length, worm_bore, gear_bore, pressure_angle=20, lead_angle=0, optimized=true, together_built=true)
+<dl>
+<dt>gear rack</dt> <dd>xx</dd>
+<dt>spur gear<dt></dt> <dd>xx</dd>
+<dt>herringbone gear</dt> <dd>xx</dd>
+<dt>rack and pinion</dt> <dd>xx</dd>
+<dt>ring gear</dt> <dd>xx</dd>
+<dt>herringbone ring gear</dt> <dd>xx</dd>
+<dt>planetary gear</dt> <dd>xx</dd>
+<dt>bevel gear</dt> <dd>xx</dd>
+<dt>bevel herringbone gear</dt> <dd>xx</dd>
+<dt>bevel gear set</dt> <dd>xx</dd>
+<dt>bevel herringbone gear set</dt> <dd>xx</dd>
+<dt>worm</dt> <dd>xx</dd>
+<dt>worm gear set</dt> <dd>xx</dd>
+</dl>
 ## Constants and Utility Functions 
 Name | value | description
 --- | --- | ---

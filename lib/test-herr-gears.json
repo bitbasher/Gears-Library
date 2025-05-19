@@ -1,0 +1,12 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "bore_diam": "6",
+            "gearmod": "2",
+            "slant": "20",
+            "teeth": "20",
+            "webtype": "lightweb"
+        }
+    }
+}
