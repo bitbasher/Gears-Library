@@ -126,8 +126,17 @@ a | b | c | d | e | f
 2 | 2.5 | 3 | 4 | 5 | 6
 8 | 10 | 12 | 16 | 20 | 25
 32 | 40 | 50 | 60
-### "optimized"
-not sure what this means yet
+### "Gear Width Fill (optimized)"
+The original parameter name for this option was the misnomer "optimized".
+It is now an enumeration called "gear_web_fill" that controls the generation of the area inside the circle of the gear's rim.
+The values are
+enum | meaning
+--- | ---
+"none" | center area will be empty
+"lighten" | a web thinner than the gear width will fill the center area. In addition, if the centre is large enough, holes will be made in the web to "lighten" it with the goal of the realized gear weighing less, and /or using less filament to print. 
+"full" | fill to the gear width
+
+Obviously this is not applied to the Rack Gear.
 ### pitch diameter (D)
 The relation of this pattern with the Normal Module (mn), the number of teeth (z)m and Lead Angle (γ) is given by
 ![pitch-diameter-eqn](https://github.com/user-attachments/assets/90ffd9f3-2552-4f4c-be38-9929e525a567)
@@ -141,10 +150,12 @@ Each additional thread increases the pressure that transfers force at the mating
 This image shows thread starts as seen from the end of the worm gear.
 
 ![worm-gear-3-thread-starts](https://github.com/user-attachments/assets/5abf4ee9-78cc-40fd-b1f8-619058067a88)
-### "together_built"
-Only modules that create a set of gears have this parameter which, when true, creates the gear shapes meshed together.
-### "tooth_number"
-The number of teeth that the gear will be created with. For modules that create sets of gears each one will have an individual "<part>_teeth" parameter.
+### "Build Together (together_built) [Bool true]"
+This option, when false, places the gears of a set flat on the XY place placed to be 3D printed.
+Left at its default vlaue ot true the gear shapes will be placed so they mesh together.
+### "tooth_number" [Number 20]
+The number of teeth that the gear will be created with.
+Modules making gear sets will have individual "<part>_teeth" parameters for each member.
 # The Gear Modules
 ## Spur Gear (with Helix option)
 spur_gear(modul, tooth_number, width, bore, pressure_angle = 20, helix_angle = 0, optimized = true)
